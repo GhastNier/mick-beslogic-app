@@ -16,28 +16,42 @@ import { MatMenuModule } from '@angular/material/menu';
 import {MatInputModule} from "@angular/material/input";
 import {SidenavComponent} from "./sidenav/sidenav.component";
 import {MainComponent} from "./main/main.component";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SearchPokemonComponent } from './search-pokemon/search-pokemon.component';
+import {FormsModule} from "@angular/forms";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {PokapiComponent} from "./pokapi/pokapi.component";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
     AppComponent,
     SidenavComponent,
-    MainComponent
+    MainComponent,
+    PokapiComponent,
+    SearchPokemonComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatButtonModule,
-        LayoutModule,
-        MatToolbarModule,
-        MatSidenavModule,
-        MatIconModule,
-        MatListModule,
-        MatGridListModule,
-        MatCardModule,
-        MatMenuModule,
-        MatInputModule
-    ],
+  imports: [
+    HttpClientModule,
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatInputModule,
+    NgbModule,
+    FormsModule,
+    FontAwesomeModule,
+    MatProgressSpinnerModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
