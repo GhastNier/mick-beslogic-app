@@ -36,6 +36,7 @@
 }
 
 .pokemon-card {
+  border-radius: 15px;
   display: flex;
   flex: 1 0 21%;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
@@ -43,6 +44,15 @@
 }
 .pokemon-card:hover {
   transform: translateY(-10px);
+}
+mat-card-header{
+  background-color: #ff9800;
+}
+mat-card-footer{
+  padding-top: 15px;
+  background-color: #ff9800;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 
@@ -67,8 +77,20 @@ mat-card-content {
 mat-card-content p {
   font-size: 1.2rem;
   margin: 10px 0;
+  padding-bottom: 10px;
 }
 
 .mat-progress-spinner {
   color: #ffcb05;
+}
+.corner{
+  align-self: center;
+  justify-self: center;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  max-height: 42px;
+}
+src .inactive{
+  fill: #434A54;
 }

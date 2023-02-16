@@ -12,7 +12,7 @@ export class MainComponent implements OnInit {
   pokemonList: any[] = [];
 
   ngOnInit() {
-    const randomIds = this.generateRandomIds(905, 8);
+    const randomIds = this.generateRandomIds(905, 120);
     const requests = randomIds.map(id =>
       this.http.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
     );
@@ -38,6 +38,7 @@ export class MainComponent implements OnInit {
         randomIds.push(id);
       }
     }
+    randomIds.sort((a,b)=>a-b)
     console.log(randomIds.toString())
     return randomIds;
   }

@@ -7,11 +7,11 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MainComponent} from "./main.component";
+import "../../assets/pokeball.svg";
 
 describe('HomeComponent', () => {
   let component: MainComponent;
   let fixture: ComponentFixture<MainComponent>;
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MainComponent],
