@@ -3,15 +3,21 @@
 }
 
 .sidenav {
+  background-color: red;
   width: 200px;
 }
 
 .sidenav .mat-toolbar {
   background: inherit;
+  font-weight: bolder;
+
 }
 
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
   z-index: 1;
+}
+.mat-color{
+  background-color: darkblue;
 }

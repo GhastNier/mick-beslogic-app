@@ -3,23 +3,7 @@
   <div class="pokemon-list-container">
     <mat-progress-spinner *ngIf="loading" mode="indeterminate"></mat-progress-spinner>
     <div class="pokemon-card-container" *ngIf="!loading">
-      <ul>
-        <li *ngFor="let pokemon of pokemonList">
-          <mat-card (click)="pokemon.favorite = !pokemon.favorite" [id]="'card_'+pokemon.id"  class="pokemon-card">
-            <mat-card-header>
-              <mat-card-title>{{ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) }}</mat-card-title>
-            </mat-card-header>
-            <img class="corner" [src]="pokemon.favorite ? './assets/pokeball.svg' : './assets/pokeball_in.svg'" alt="Pokéball"/>
-            <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+pokemon.id+'.png'"
-                 [alt]="pokemon.name" class="pokemon-image">
-            <mat-card-content>
-              <p><strong>Height:</strong> {{ pokemon.height/10 }} m</p>
-              <p><strong>Weight:</strong> {{ pokemon.weight/100 }} kg</p>
-            </mat-card-content>
-            <mat-card-footer/>
-          </mat-card>
-        </li>
-      </ul>
+          <app-pokemon></app-pokemon>
     </div>
   </div>
 </div>
