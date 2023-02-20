@@ -1,21 +1,23 @@
-<div class="flex-container">
+
   <mat-toolbar class="top-toolbar">
-    <div>Pokédex Super Duper</div>
+    <div class="h1 p-4">Pokédex Super Duper</div>
   </mat-toolbar>
-  <mat-sidenav-container class="sidenav-container flex-item-2">
+  <mat-sidenav-container class="sidenav-container">
 
-      <mat-sidenav #drawer class="sidenav" fixedInViewport
-                   [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      <mat-sidenav #drawer [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
                    [mode]="(isHandset$ | async) ? 'over' : 'side'"
-                   [opened]="(isHandset$ | async) === false">
+                   [opened]="(isHandset$ | async) === false"
+                   class="sidenav"
+                   fixedInViewport>
 
-        <mat-toolbar>Menu</mat-toolbar>
+        <mat-toolbar class="toolbar-red">Menu</mat-toolbar>
         <mat-nav-list>
           <a mat-list-item routerLink="">Accueil</a>
           <a mat-list-item href="#">Recherche</a>
         </mat-nav-list>
+
     </mat-sidenav>
-    <mat-sidenav-content class="flex-item-2">
+    <mat-sidenav-content>
       <button
         type="button"
         aria-label="Toggle sidenav"
@@ -24,8 +26,8 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <router-outlet class="flex-item-2"></router-outlet>
+      <router-outlet></router-outlet>
     </mat-sidenav-content>
 
   </mat-sidenav-container>
-</div>
+

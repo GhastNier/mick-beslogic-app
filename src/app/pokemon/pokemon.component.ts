@@ -1,4 +1,13 @@
-import {Component, ElementRef, OnInit, ViewChild, AfterViewInit} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  ViewChildren,
+  Renderer2,
+  QueryList
+} from '@angular/core';
 import {PokemonsService} from '../services/pokemons.service';
 import {PokemonMain, Pokemons} from "../interfaces/pokemons";
 
@@ -9,27 +18,44 @@ import {PokemonMain, Pokemons} from "../interfaces/pokemons";
   styleUrls: ['./pokemon.component.css']
 })
 export class PokemonComponent implements OnInit, AfterViewInit {
-  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
-  pokemons: Pokemons[] = [];
+  @ViewChildren('listItem') listItemsRef!: QueryList<ElementRef<HTMLLIElement>>;
+  @ViewChild('scrollContainer') scrollContainerRef!: ElementRef<HTMLUListElement>;
   pokemonsMain: PokemonMain[] = [];
   page = 1;
   isLoading = false;
-
   fav: string = "./assets/pokeball.svg";
   notFav: string = "./assets/pokeball_in.svg";
 
   favorite: boolean = false;
 
-
-  constructor(private pokemonService: PokemonsService) {
+  constructor(private renderer: Renderer2, private pokemonService: PokemonsService) {
   }
 
   ngOnInit() {
     this.loadPokemon()
+
+    const scrollContainerNative = this.scrollContainerRef.nativeElement;
+    this.listItemsRef.forEach(itemRef => {
+      const listItemNative = itemRef.nativeElement;
+      console.log(listItemNative.textContent);
+    });
+
+    this.scrollContainerRef.nativeElement.addEventListener('scroll', () => {
+      if (scrollContainerNative.scrollTop + scrollContainerNative.clientHeight >= scrollContainerNative.scrollHeight) {
+        this.loadPokemon()
+      }
+    });
   }
 
   ngAfterViewInit() {
-    setTimeout(() => this.addScrollEventListener(), 0);
+    if (this.scrollContainerRef === undefined) {
+      console.error("The Scroll Container is not Initialized")
+    // } else {
+    //   console.log("This is the scroll container: " + this.scrollContainerRef)
+    //   this.renderer.listen(scrollContainerNative, 'scroll', (event) => {
+    //     this.loadPokemon()
+    //   });
+    }
   }
 
   loadPokemon(): void {
@@ -62,11 +88,11 @@ export class PokemonComponent implements OnInit, AfterViewInit {
     });
   }
 
-  addScrollEventListener(): void {
-    this.scrollContainer.nativeElement.addEventListener('scroll', () => {
-      if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight >= this.scrollContainer.nativeElement.scrollHeight) {
-        this.loadPokemon();
-      }
-    });
-  }
+  // addScrollEventListener(scrollContainerNative: any): void {
+  //   scrollContainerNative.addEventListener('scroll', () => {
+  //     if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight >= this.scrollContainer.nativeElement.scrollHeight) {
+  //       this.loadPokemon();
+  //     }
+  //   });
+  // }
 }
