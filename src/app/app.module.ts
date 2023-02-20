@@ -23,6 +23,7 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {HttpClientModule} from "@angular/common/http";
 import {PokemonComponent} from './pokemon/pokemon.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import {PokemonComponent} from './pokemon/pokemon.component';
     NgbModule,
     FormsModule,
     FontAwesomeModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
