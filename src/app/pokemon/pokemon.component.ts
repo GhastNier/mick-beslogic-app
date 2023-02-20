@@ -1,5 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {PokemonsService} from '../services/pokemons.service';
+import {map} from "rxjs/operators";
+import {Observable, Subscription} from "rxjs";
+import {Pokemon} from './pokemon.interface';
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-pokemon',
@@ -7,85 +11,67 @@ import {PokemonsService} from '../services/pokemons.service';
   styleUrls: ['./pokemon.component.css']
 })
 export class PokemonComponent implements OnInit {
+  @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
   fav: string = "./assets/pokeball.svg";
-
-  get randomIds(): number[] {
-    return this._randomIds;
-  }
-
-  set randomIds(value: number[]) {
-    this._randomIds = value;
-  }
+  notFav: string = "./assets/pokeball.svg";
 
   pokemonList: any[] = [];
-  pokemon: any;
+  pokemons: Pokemon[]=[];
   favorite: boolean = false;
-  private _randomIds: number[] = [];
+  private favoriteSubscription: Subscription | undefined;
+  page = 1;
+  isLoading = false;
 
-  constructor(private pokemonService: PokemonsService) {
+  constructor(private http: HttpClient, private pokemonService: PokemonsService) {
+    this.scrollContainer = new ElementRef(undefined);
   }
 
-  ngOnInit() {
-    this.generateRandomIds(905, 5);
-    console.log(this.randomIds.toString())
-
+  ngOnInit(): void {
+    this.loadPokemon();
+    this.addScrollEventListener();
   }
 
-  generateBasePokemon(ids: number[]) {
-    ids.forEach(id => {
-      this.pokemonService.getPokemon(id).subscribe(data => {
-        if (data) {
-          this.pokemonList.push(data)
-        }
-      })
-    })
+  loadPokemon(): void {
+    this.isLoading = true;
+    this.pokemonService.getAllPokemon(1).subscribe(data => {
+      this.pokemons.push(...data);
+      this.page++;
+      this.isLoading = false;
+    });
   }
 
-  generateRandomIds(max: number, count: number): number[] {
-    this._randomIds = [];
-    while (this._randomIds.length < count) {
-      const id = Math.floor(Math.random() * max) + 1;
-      if (!this._randomIds.includes(id)) {
-        this._randomIds.push(id);
+  addScrollEventListener(): void {
+    this.scrollContainer.nativeElement.addEventListener('scroll', () => {
+      if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight >= this.scrollContainer.nativeElement.scrollHeight) {
+        this.loadPokemon();
       }
-    }
-    this._randomIds.sort((a, b) => a - b)
-    this.generateBasePokemon(this._randomIds)
-    return this._randomIds;
+    });
   }
 
-  getPokemon(id: number) {
-    this.pokemonService.getPokemon(id).subscribe(data => {
-      if (data) {
-        this.pokemon = data
-      }
-    })
-  }
 
   updateFavorite(id: number, favorite: boolean) {
     this.pokemonService.updatePokemonFavorite(id, favorite).subscribe(data => {
       if (data) {
-        this.pokemon = data;
-        const updatedPkmn = this.pokemonList.find(p => p.id === id);
-        if (updatedPkmn) {
-          updatedPkmn.favorite = favorite
-          console.log("Update:" + updatedPkmn.favorite + " \n ApiValue: " + favorite)
-        }
+        this.pokemons = this.pokemons.map(p => {
+          if (p.id === id) {
+            return {
+              ...p,
+              favorite: favorite
+            };
+          } else {
+            return p;
+          }
+        });
+        console.log(`Updated favorite for Pokemon with ID ${id} to ${favorite}`);
       }
-    })
+    });
   }
 
-  isFavorite(id: number) {
-    this.pokemonService.checkFavorite(id).subscribe(data => this.pokemon = data).unsubscribe()
-    if (this.pokemon.favorite) {
-      this.fav = "pokeball.svg"
-    } else {
-      this.fav = "pokeball_in.svg"
-    }
-    return this.pokemon
-  }
-
-  toggleFavorite(pokemon: any) {
-    this.updateFavorite(pokemon.id, pokemon.favorite)
+  isFavorite(id: number): Observable<boolean> {
+    return this.pokemonService.checkFavorite(id).pipe(
+      map((res) => {
+        return res.favorite;
+      })
+    );
   }
 }

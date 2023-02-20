@@ -1,23 +1,64 @@
+@import url("https://fonts.cdnfonts.com/css/pokemon-solid");
+
 .sidenav-container {
   height: 100%;
 }
 
 .sidenav {
+  border-top-right-radius: 15px;
+  margin-top: 90px;
   background-color: red;
-  width: 200px;
+
 }
 
 .sidenav .mat-toolbar {
   background: inherit;
   font-weight: bolder;
-
+  top: 120px;
+  width: 140px;
 }
 
-.mat-toolbar.mat-primary {
+.mat-toolbar.top-toolbar {
   position: sticky;
   top: 0;
-  z-index: 1;
+  height: 100px;
+  width: 100%;
+  background-color: darkblue;
+  font-family: 'Pokemon Solid', serif;
+  font-size: 3vh;
+  text-shadow: -5px 6px 9px #3C5AA6, -4px 4px #2a75bb, 4px 4px #2a75bb, 4px 2px #2a75bb, -4px -4px #2a75bb;
+  letter-spacing: 15px;
+  color: #ffcb05;
+
 }
-.mat-color{
+.mat-color {
   background-color: darkblue;
 }
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+}
+
+.flex-item-1 {
+  order: 0;
+  flex: 1 1 100%;
+  align-self: auto;
+}
+
+.flex-item-2 {
+  width: 100%;
+  align-self: auto;
+  background-color: #343a40;
+}
+
+.flex-item-3 {
+  order: 0;
+  flex: .85 1 auto;
+  align-self: auto;
+}
+
