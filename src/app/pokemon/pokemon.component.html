@@ -1,17 +1,20 @@
-<ul #scrollContainer>
-  <li *ngFor="let pokemon of pokemons" >
-<mat-card (click)="updateFavorite(pokemon.id,pokemon.favorite)" [id]="'card_'+pokemon.id" class="pokemon-card">
-  <mat-card-header>
-    <mat-card-title>{{ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) }}</mat-card-title>
-  </mat-card-header>
-  <img class="corner" [src]="(isFavorite(pokemon.id) | async) ? fav : notFav" alt="Pokéball"/>
-  <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+pokemon.id+'.png'"
-       [alt]="pokemon.name" class="pokemon-image">
-  <mat-card-content>
-    <p><strong>Height:</strong> {{ pokemon.height / 10 }} m</p>
-    <p><strong>Weight:</strong> {{ pokemon.weight / 100 }} kg</p>
-  </mat-card-content>
-  <mat-card-footer/>
-</mat-card>
-  </li>
-</ul>
+<mat-progress-spinner *ngIf="isLoading" mode="indeterminate"></mat-progress-spinner>
+<div class="pokemon-card-container" *ngIf="!isLoading" >
+  <ul>
+    <li *ngFor="let pokemon of pokemonsMain" #scrollContainer>
+      <mat-card (click)="updateFavorite(pokemon.id)" [id]="'card_'+pokemon.id" class="pokemon-card">
+        <mat-card-header>
+          <mat-card-title>{{ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) }}</mat-card-title>
+        </mat-card-header>
+        <img class="corner" [src]="pokemon.favorite?fav:notFav" alt="Pokéball"/>
+        <img [src]="pokemon.sprite"
+             [alt]="pokemon.name" class="pokemon-image">
+        <mat-card-content>
+          <p><strong>Height:</strong> {{ pokemon.height / 10 }} m</p>
+          <p><strong>Weight:</strong> {{ pokemon.weight / 100 }} kg</p>
+        </mat-card-content>
+        <mat-card-footer/>
+      </mat-card>
+    </li>
+  </ul>
+</div>

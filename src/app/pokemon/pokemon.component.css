@@ -95,14 +95,19 @@ src .inactive{
   fill: #434A54;
 }
 ul {
+  align-items: center;
   list-style: none;
   display: flex;
   flex-wrap: wrap;
   padding: 0;
   margin: 10px;
+  max-width: 75%;
 }
 
 li {
-  display: inline-block;
   margin: 10px;
+}
+li#scrollContainer {
+  height: 400px;
+  overflow-y: scroll;
 }

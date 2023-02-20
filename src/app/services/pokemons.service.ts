@@ -7,25 +7,15 @@ import {HttpClient} from "@angular/common/http";
 export class PokemonsService {
   constructor(private http: HttpClient) {
   }
-
-  // Implement methods to get and update Pokemon
   getPokemon(id: number) {
     return this.http.get<any>(`http://localhost:3000/pokemon/${id}`);
   }
-
-  updatePokemonFavorite(id: number, currentFavorite: boolean) {
-    const newFavorite = !currentFavorite
-    return this.http.put<boolean>(`http://localhost:3000/pokemon/fav/${id}`, {favorite: newFavorite});
+  initPokemon(page: number) {
+    return this.http.get<any>(`http://localhost:3000/pokemon?page=${page}`)
   }
-
-  getAllPokemon(page: number | undefined) {
-    if (page == undefined) {
-      return this.http.get<any[]>(`http://localhost:3000/pokemons?page=1`)
-    } else {
-      return this.http.get<any[]>(`http://localhost:3000/pokemons?page=${page}`)
-    }
+  updatePokemonFavorite(id: number) {
+    return this.http.put<any>(`http://localhost:3000/pokemon/${id}/isFav`, {});
   }
-
   checkFavorite(id: number) {
     return this.http.get<any>(`http://localhost:3000/pokemon/${id}/fav`)
   }
