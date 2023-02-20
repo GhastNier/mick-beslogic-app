@@ -1,91 +1,72 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {PokemonsService} from '../services/pokemons.service';
+import {PokemonMain, Pokemons} from "../interfaces/pokemons";
+
 
 @Component({
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
   styleUrls: ['./pokemon.component.css']
 })
-export class PokemonComponent implements OnInit {
+export class PokemonComponent implements OnInit, AfterViewInit {
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
+  pokemons: Pokemons[] = [];
+  pokemonsMain: PokemonMain[] = [];
+  page = 1;
+  isLoading = false;
+
   fav: string = "./assets/pokeball.svg";
+  notFav: string = "./assets/pokeball_in.svg";
 
-  get randomIds(): number[] {
-    return this._randomIds;
-  }
-
-  set randomIds(value: number[]) {
-    this._randomIds = value;
-  }
-
-  pokemonList: any[] = [];
-  pokemon: any;
   favorite: boolean = false;
-  private _randomIds: number[] = [];
+
 
   constructor(private pokemonService: PokemonsService) {
   }
 
   ngOnInit() {
-    this.generateRandomIds(905, 5);
-    console.log(this.randomIds.toString())
-
+    this.loadPokemon()
   }
 
-  generateBasePokemon(ids: number[]) {
-    ids.forEach(id => {
-      this.pokemonService.getPokemon(id).subscribe(data => {
-        if (data) {
-          this.pokemonList.push(data)
-        }
-      })
-    })
+  ngAfterViewInit() {
+    setTimeout(() => this.addScrollEventListener(), 0);
   }
 
-  generateRandomIds(max: number, count: number): number[] {
-    this._randomIds = [];
-    while (this._randomIds.length < count) {
-      const id = Math.floor(Math.random() * max) + 1;
-      if (!this._randomIds.includes(id)) {
-        this._randomIds.push(id);
-      }
-    }
-    this._randomIds.sort((a, b) => a - b)
-    this.generateBasePokemon(this._randomIds)
-    return this._randomIds;
+  loadPokemon(): void {
+    this.isLoading = true;
+    this.pokemonService.initPokemon(this.page).subscribe(data => {
+      this.pokemonsMain.push(...data);
+      this.page++;
+      this.isLoading = false;
+    });
   }
 
   getPokemon(id: number) {
     this.pokemonService.getPokemon(id).subscribe(data => {
+      const index = this.pokemonsMain.findIndex(p => p.id === id);
       if (data) {
-        this.pokemon = data
+        this.pokemonsMain[index] = data
+        this.pokemonsMain[index].favorite = data.favorite
       }
     })
   }
 
-  updateFavorite(id: number, favorite: boolean) {
-    this.pokemonService.updatePokemonFavorite(id, favorite).subscribe(data => {
-      if (data) {
-        this.pokemon = data;
-        const updatedPkmn = this.pokemonList.find(p => p.id === id);
-        if (updatedPkmn) {
-          updatedPkmn.favorite = favorite
-          console.log("Update:" + updatedPkmn.favorite + " \n ApiValue: " + favorite)
-        }
+  updateFavorite(id: number) {
+    this.pokemonService.updatePokemonFavorite(id).subscribe(updatedPokemon => {
+      const index = this.pokemonsMain.findIndex(p => p.id === updatedPokemon.id);
+      if (index !== -1) {
+        this.pokemonsMain[index] = updatedPokemon;
+        this.pokemonsMain[index].favorite = updatedPokemon.favorite;
       }
-    })
+      this.getPokemon(id)
+    });
   }
 
-  isFavorite(id: number) {
-    this.pokemonService.checkFavorite(id).subscribe(data => this.pokemon = data).unsubscribe()
-    if (this.pokemon.favorite) {
-      this.fav = "pokeball.svg"
-    } else {
-      this.fav = "pokeball_in.svg"
-    }
-    return this.pokemon
-  }
-
-  toggleFavorite(pokemon: any) {
-    this.updateFavorite(pokemon.id, pokemon.favorite)
+  addScrollEventListener(): void {
+    this.scrollContainer.nativeElement.addEventListener('scroll', () => {
+      if (this.scrollContainer.nativeElement.scrollTop + this.scrollContainer.nativeElement.clientHeight >= this.scrollContainer.nativeElement.scrollHeight) {
+        this.loadPokemon();
+      }
+    });
   }
 }
