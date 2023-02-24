@@ -4,7 +4,7 @@
   <div class="mat-h1 subtitle">Pokémon <i>super cool</i> du moment!</div>
   <ul class="pokemon-card-container" #scrollContainer>
     <li *ngFor="let pokemon of pokemonsMain">
-      <mat-card (click)="updateFavorite(pokemon.id)" [id]="'card_'+pokemon.id" class="pokemon-card">
+      <mat-card (click)="updateFavorite(pokemon.natDex)" [id]="'card_'+pokemon.natDex" class="pokemon-card">
         <mat-card-header>
           <mat-card-title #listItem>{{ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) }}</mat-card-title>
         </mat-card-header>

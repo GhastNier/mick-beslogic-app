@@ -22,9 +22,9 @@ async function mongoInitialize(filter, options) {
       const pokemonComp = db.collection('main')
 
       // Set up the routes
-      app.get('/pokemon/:id', async (req, res) => {
-        const id = parseInt(req.params.id);
-        const pokemon = await pokemonComp.findOne({_id: id});
+      app.get('/pokemon/:natDex', async (req, res) => {
+        const natDex = parseInt(req.params.natDex);
+        const pokemon = await pokemonComp.findOne({natDex: natDex});
         if (!pokemon) {
           res.status(404).send('Pokemon not found');
         } else {
@@ -48,9 +48,9 @@ async function mongoInitialize(filter, options) {
         }
       });
 
-      app.get('/pokemon/:id/fav', async (req, res) => {
-        const id = parseInt(req.params.id);
-        const pokemon = await pokemonComp.findOne({id: id});
+      app.get('/pokemon/:natDex/isFav', async (req, res) => {
+        const natDex = parseInt(req.params.natDex);
+        const pokemon = await pokemonComp.findOne({natDex: natDex});
         if (!pokemon) {
           res.status(404).send('Pokemon not found');
         } else {
@@ -58,22 +58,22 @@ async function mongoInitialize(filter, options) {
         }
       });
 
-      app.put('/pokemon/:id/isFav', async (req, res) => {
-        const id = parseInt(req.params.id);
-        const pokemon = await pokemonComp.findOne({id: id});
+      app.put('/pokemon/:natDex/setFav', async (req, res) => {
+        const natDex = parseInt(req.params.natDex);
+        const pokemon = await pokemonComp.findOne({natDex: natDex});
         if (!pokemon) {
           res.status(404).send('Pokemon not found');
         } else {
           let newFavoriteValue = !pokemon.favorite;
           console.log(newFavoriteValue)
-          await pokemonComp.findOneAndUpdate({_id: id}, {
+          await pokemonComp.findOneAndUpdate({natDex: natDex}, {
               '$set': {
                 'favorite': newFavoriteValue
 
               }
             }
           );
-          res.json({message: `Updated favorite status of Pokémon with _id ${id}. ---> From ${!newFavoriteValue} to ${newFavoriteValue}`});
+          res.json({message: `Updated favorite status of Pokémon with _id ${natDex}. ---> From ${!newFavoriteValue} to ${newFavoriteValue}`});
         }
       });
       app.listen(port, () => {
@@ -83,6 +83,6 @@ async function mongoInitialize(filter, options) {
   });
 }
 
-mongoInitialize({}, {_id: 1, id: 1, height: 1, weight: 1, name: 1, favorite: 1}).then(() => {
+mongoInitialize({}, {_id: 1, natDex: 1, height: 1, weight: 1, name: 1, favorite: 1}).then(() => {
   console.log('MongoDB and routes are initialized');
 });

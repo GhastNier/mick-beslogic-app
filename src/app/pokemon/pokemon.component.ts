@@ -69,7 +69,7 @@ export class PokemonComponent implements OnInit, AfterViewInit {
 
   getPokemon(id: number) {
     this.pokemonService.getPokemon(id).subscribe(data => {
-      const index = this.pokemonsMain.findIndex(p => p.id === id);
+      const index = this.pokemonsMain.findIndex(p => p.natDex === id);
       if (data) {
         this.pokemonsMain[index] = data
         this.pokemonsMain[index].favorite = data.favorite
@@ -77,14 +77,14 @@ export class PokemonComponent implements OnInit, AfterViewInit {
     })
   }
 
-  updateFavorite(id: number) {
-    this.pokemonService.updatePokemonFavorite(id).subscribe(updatedPokemon => {
-      const index = this.pokemonsMain.findIndex(p => p.id === updatedPokemon.id);
+  updateFavorite(natDex: number) {
+    this.pokemonService.updatePokemonFavorite(natDex).subscribe(updatedPokemon => {
+      const index = this.pokemonsMain.findIndex(p => p.natDex === updatedPokemon.natDex);
       if (index !== -1) {
         this.pokemonsMain[index] = updatedPokemon;
         this.pokemonsMain[index].favorite = updatedPokemon.favorite;
       }
-      this.getPokemon(id)
+      this.getPokemon(natDex)
     });
   }
 
